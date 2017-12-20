@@ -111,6 +111,12 @@ def get_html_2XX_only(url, network=None, response=None):
     try:
         response = requests.get(
             url=url, **get_request_kwargs(timeout, useragent, proxies, headers))
+
+        content_type = response.headers.get('Content-Type', '')
+        if 'text/html' not in content_type:
+            log.error('not is html on URL: %s' % (url))
+            return ''
+
     except requests.exceptions.RequestException as e:
         log.error('get_html_2XX_only() error. %s on URL: %s' % (e, url))
         return ''
