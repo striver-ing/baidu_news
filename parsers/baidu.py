@@ -61,7 +61,7 @@ def add_root_url(keywords):
                         '''%(uuid, title, author, release_time, website_domain, url, content))
 
                     # 入库
-                    if tools.is_have_chinese(title):
+                    if tools.is_have_chinese(content):
                         self_base_parser.add_news_acticle(uuid, title, author, release_time, website_name , website_domain, website_position, url, content)
 
                     current_date = tools.get_current_date('%Y-%m-%d')
