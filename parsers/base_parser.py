@@ -69,7 +69,7 @@ def add_news_acticle(uuid, title, author, release_time, website_name, website_do
         'uuid' : uuid,
         'title' : title,
         'author' : author,
-        'release_time' : release_time or tools.get_current_date(),
+        'release_time' : release_time,
         'website' : website_name,
         'domain' : website_domain,
         'position' : website_position,

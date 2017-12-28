@@ -174,6 +174,9 @@ class ArticleExtractor():
             content = self.__replace_str(self._text, '<(.|\n)*?>', '<>')
 
         release_time = tools.get_info(content, DAY_TIME_REGEXS, fetch_one = True)
+        if not release_time:
+            release_time = tools.get_info(self.__replace_str(self._text, '<(.|\n)*?>', '<>'), DAY_TIME_REGEXS, fetch_one = True)
+
         release_time = tools.format_date(release_time)
 
         return release_time
