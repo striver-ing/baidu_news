@@ -8,6 +8,7 @@ Created on 2017-11-27 16:41
 '''
 import sys
 sys.path.append('..')
+import init
 import re
 import utils.tools as tools
 from utils.log import log
@@ -217,7 +218,8 @@ if __name__ == '__main__':
         # 'http://qiushi.nbgxedu.com/show.aspx?id=d479b45a-1747-4f60-83f3-f1e2dc85a0d2',
         # 'http://31ly.com/show/10117/product-13846.html'
         # 'http://www.jawin.com.cn/news/show-247708.html'
-        'http://pjsl.cn/Item/5845.aspx'
+        # 'http://pjsl.cn/Item/5845.aspx'
+        'http://news.sina.com.cn/sf/news/flfg/2017-12-04/doc-ifypikwt7105025.shtml'
 
     ]
     for url in urls:

@@ -3,7 +3,7 @@
 
 import sys
 sys.path.append("..")
-
+import init
 import re
 import json
 import configparser #读配置文件的
