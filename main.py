@@ -5,6 +5,8 @@ from utils.log import log
 from base.keywords import Keywords
 import task_status
 import time
+import pid
+pid.record_pid(__file__)
 
 tab_list = ['BAIDU_NEWS_urls', 'BAIDU_NEWS_site_info', 'BAIDU_NEWS_info']  # 配置表(第一个须为url表)
 tab_unique_key_list = ['url', 'site_id', 'url']  # 唯一索引
