@@ -87,10 +87,10 @@ class ES(Singleton):
             datas = self._es.get(index = table, doc_type = doc_type, id = data_id)
 
         except Exception as e:
-            log.error(e)
-            return str(e)
-        else:
-            return datas
+            # log.error(e)
+            pass
+
+        return datas
 
 
     def search(self, table, body = {}):
@@ -111,9 +111,8 @@ class ES(Singleton):
 
         except Exception as e:
             log.error(e)
-            return str(e)
-        else:
-            return datas
+
+        return datas
 
     def update_by_id(self, table, data_id, data, doc_type = ''):
         '''
@@ -170,8 +169,7 @@ class ES(Singleton):
 
 if __name__ == '__main__':
     es = ES()
-    datas = [{'id':1, 'name':'test1'},{'id':2, 'name':'test2'},{'id':3, 'name':'test3'}]
-    es.add_batch(datas, 'id', 'myindex2')
+    print(es.get('news_article', '123131'))
     # { "create": { "_index": "index1", "_type": "resource", "_id": 1 } }
     # { "title": "周星驰最新电影" }
     # { "create": { "_index": "index1", "_type": "resource", "_id": 2 } }

@@ -11,6 +11,7 @@ sys.path.append('../../')
 import init
 
 import utils.tools as tools
+from utils.log import log
 from db.elastic_search import ES
 
 es = ES()
@@ -65,6 +66,10 @@ def set_mapping():
     es.set_mapping('news_article', mapping)
 
 def add_news_acticle(uuid, title, author, release_time, website_name, website_domain, website_position, url, content):
+    if es.get('news_article', uuid):
+        log.debug('%s 已存在'%title)
+        return False
+
     article = {
         'uuid' : uuid,
         'title' : title,
@@ -79,6 +84,7 @@ def add_news_acticle(uuid, title, author, release_time, website_name, website_do
     }
 
     es.add('news_article', article, uuid)
+    return True
 
 
 if __name__ == '__main__':

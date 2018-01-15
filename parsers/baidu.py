@@ -28,6 +28,7 @@ def add_root_url(keywords):
         parser_params : %s
         ''' % str(keywords))
     for keyword in keywords:
+        log.debug('处理关键词 ' + keyword)
         next_keyword = False
         for num in range(0, 751, 50):
             # link = "http://news.baidu.com/ns?word=%s&pn=%s&cl=2&ct=1&tn=news&rn=50&ie=utf-8&bt=0&et=0"
@@ -35,6 +36,8 @@ def add_root_url(keywords):
             link = 'http://news.baidu.com/ns?word=%s&pn=%s&cl=2&ct=0&tn=news&rn=50&ie=utf-8&bt=0&et=0' % (keyword, num)
             html = tools.get_html_by_webdirver(link)
             headers = tools.get_tag(html, 'h3', {'class': 'c-title'}, find_all=True)
+            if not headers:
+                break
             for i in range(0, len(headers)):
                 # print(headers[i])
                 url = headers[i].a['href']
@@ -58,14 +61,14 @@ def add_root_url(keywords):
                         domain       %s
                         url          %s
                         content      %s
-                        '''%(uuid, title, author, release_time, website_domain, url, content))
+                        '''%(uuid, title, author, release_time, website_domain, url, '...'))
 
                     # 入库
+                    is_continue = False
                     if tools.is_have_chinese(content):
-                        self_base_parser.add_news_acticle(uuid, title, author, release_time, website_name , website_domain, website_position, url, content)
+                        is_continue = self_base_parser.add_news_acticle(uuid, title, author, release_time, website_name , website_domain, website_position, url, content)
 
-                    current_date = tools.get_current_date('%Y-%m-%d')
-                    if release_time and current_date > release_time:
+                    if not is_continue:
                         next_keyword = True
                         break
 
