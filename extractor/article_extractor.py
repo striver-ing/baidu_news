@@ -219,22 +219,27 @@ if __name__ == '__main__':
         # 'http://31ly.com/show/10117/product-13846.html'
         # 'http://www.jawin.com.cn/news/show-247708.html'
         # 'http://pjsl.cn/Item/5845.aspx'
-        'http://news.sina.com.cn/sf/news/flfg/2017-12-04/doc-ifypikwt7105025.shtml'
+        # 'http://news.sina.com.cn/sf/news/flfg/2017-12-04/doc-ifypikwt7105025.shtml'
+        # 'http://cq.people.com.cn/n2/2018/0327/c365403-31387318.html'
+        'http://www.zjgrrb.com/zjzgol/system/2018/03/28/030796013.shtml'
 
     ]
-    for url in urls:
-        html = tools.get_html(url)
+    # for url in urls:
+    #     html = tools.get_html(url)
 
-        article_extractor = ArticleExtractor(url, html)
-        content = article_extractor.get_content()
-        title = article_extractor.get_title()
-        release_time = article_extractor.get_release_time()
-        author = article_extractor.get_author()
-        print('---------------------------')
-        print(url)
-        print('title : ', title)
-        print('release_time: ', release_time)
-        print('author', author)
-        print('content : ',content)
-        print('---------------------------')
-
+    #     article_extractor = ArticleExtractor(url, html)
+    #     content = article_extractor.get_content()
+    #     title = article_extractor.get_title()
+    #     release_time = article_extractor.get_release_time()
+    #     author = article_extractor.get_author()
+    #     print('---------------------------')
+    #     print(url)
+    #     print('title : ', title)
+    #     print('release_time: ', release_time)
+    #     print('author', author)
+    #     print('content : ',content)
+    #     print('---------------------------')
+    content = '<span id="pubtime_baidu"> 2018年3月28日　11:05  </span> '
+    release_time = tools.get_info(content, DAY_TIME_REGEXS, fetch_one = True)
+    release_time = tools.format_date(release_time)
+    print(release_time)

@@ -54,9 +54,9 @@ TIME_REGEXS = [
 DAY_TIME_REGEXS = []
 for day_regex in DAY_REGEXS:
     for time_regex in TIME_REGEXS:
-        DAY_TIME_REGEXS.append(day_regex[:-1] + ' *?' + time_regex[1:])
+        DAY_TIME_REGEXS.append(day_regex[:-1] + '\s*?' + time_regex[1:])
 
-# DAY_TIME_REGEXS.extend(DAY_REGEXS)
+DAY_TIME_REGEXS.extend(DAY_REGEXS)
 
 # 作者
 AUTHOR_REGEXS = [

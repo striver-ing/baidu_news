@@ -50,7 +50,7 @@ class ES(Singleton):
             table = table.lower()
             self._es.index(index = table, doc_type = doc_type or table ,id = data_id, body = data)
         except Exception as e:
-            log.error(e)
+            # log.error(e)
             return False
         else:
             return True

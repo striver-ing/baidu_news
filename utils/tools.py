@@ -126,7 +126,6 @@ def get_html_2XX_only(url, network=None, response=None):
     return html
 
 def _get_html_from_response(response):
-
     if response.encoding != FAIL_ENCODING:
         # return response as a unicode string
         html = response.text

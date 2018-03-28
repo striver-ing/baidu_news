@@ -7,7 +7,7 @@ import threading
 
 class Spider(threading.Thread):
     def __init__(self, tab_list, tab_unique_key_list, tab_ensure_index_list, parser_count=None,
-                 site_parsers=None, parser_params={}, begin_callback=None, end_callback=None):
+                 site_parsers=None, parser_params={}, begin_callback=None, end_callback=None, delete_tab_urls = False):
         '''
         @summary:
         ---------
@@ -21,11 +21,13 @@ class Spider(threading.Thread):
         @result:
         '''
         super(Spider, self).__init__()
+        self._db = MongoDB()
 
         self._tab_urls = tab_list[0]
+        if delete_tab_urls: self._db.delete(self._tab_urls)
+
         self._site_parsers = site_parsers
 
-        self._db = MongoDB()
         for tab_index in range(len(tab_list)):
             self._db.set_unique_key(tab_list[tab_index], tab_unique_key_list[tab_index])
             # 设置索引 加快查询速度

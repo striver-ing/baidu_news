@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+'''
+Created on 2018-01-17 11:34
+---------
+@summary:
+---------
+@author: Administrator
+'''
+
+
 import base.base_parser as base_parser
 from base.spider import Spider
 from parsers import *
@@ -29,6 +39,8 @@ def main():
         task_status.is_doing = True
 
         keywords = Keywords().get_keywords()
+        # print(keywords)
+        # keywords = ['浙江省']
 
         def begin_callback():
             log.info('\n********** spider_main begin **********')
@@ -40,7 +52,7 @@ def main():
         # 配置spider
         spider = Spider(tab_list, tab_unique_key_list, tab_ensure_index_list, parser_count=1,
                         site_parsers=parser_siteid_list, begin_callback=begin_callback, end_callback=end_callback,
-                        parser_params=keywords)
+                        parser_params=keywords, delete_tab_urls = True)
 
         # 添加parser
         for parser in parser_list:
