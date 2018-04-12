@@ -132,6 +132,11 @@ def _get_html_from_response(response):
     else:
         # don't attempt decode, return response in bytes
         html = response.content
+        html = get_unicode_html(html)
+        if not is_have_chinese(html):
+            response.encoding = 'gb2312'
+            html = response.text
+
     return html or ''
 
 def get_unicode_html(html):
@@ -161,8 +166,8 @@ def get_html(url):
     '''
 
     html = get_html_2XX_only(url, NetWork())
-    if html and isinstance(html, bytes):
-        html = get_unicode_html(html)
+    # if html and isinstance(html, bytes):
+    #     html = get_unicode_html(html)
 
     return html
 
