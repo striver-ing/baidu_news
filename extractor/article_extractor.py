@@ -21,6 +21,7 @@ class ArticleExtractor():
 
         self._content_start_pos = ''
         self._content_end_pos = ''
+        self._content_center_pos = ''
         self._paragraphs = ''
 
         if not html:
@@ -129,7 +130,7 @@ class ArticleExtractor():
         # paragraph_lengths = [len(paragraph.strip()) for paragraph in paragraphs]
         paragraph_block_lengths = [sum(paragraph_lengths[i : i + MAX_PARAGRAPH_DISTANCE]) for i in range(len(paragraph_lengths))]  # 连续n段段落长度的总和（段落块），如段落长度为[0,1,2,3,4] 则连续三段段落长度为[3,6,9,3,4]
 
-        content_start_pos = content_end_pos = paragraph_block_lengths.index(max(paragraph_block_lengths)) #文章的开始和结束位置默认在段落块文字最密集处
+        self._content_center_pos = content_start_pos = content_end_pos = paragraph_block_lengths.index(max(paragraph_block_lengths)) #文章的开始和结束位置默认在段落块文字最密集处
         min_paragraph_block_length = MIN_PARAGRAPH_LENGHT * MAX_PARAGRAPH_DISTANCE
         # 段落块长度大于最小段落块长度且数组没有越界，则看成在正文内。开始下标继续向上查找
         while content_start_pos >= 0 and paragraph_block_lengths[content_start_pos] > min_paragraph_block_length:
@@ -167,7 +168,7 @@ class ArticleExtractor():
 
         return author
 
-    def get_release_time(self):
+    def get_release_time_old(self):
 
         if self._content_start_pos and self._content_end_pos:
             content = self.__replace_str('\n'.join(self._paragraphs[self._content_start_pos  - RELEASE_TIME_OFFSET: self._content_end_pos + RELEASE_TIME_OFFSET]), '<(.|\n)*?>', '<>')
@@ -179,6 +180,25 @@ class ArticleExtractor():
             release_time = tools.get_info(self.__replace_str(self._text, '<(.|\n)*?>', '<>'), DAY_TIME_REGEXS, fetch_one = True)
 
         release_time = tools.format_date(release_time)
+
+        return release_time
+
+    def get_release_time(self):
+        def get_release_time_in_paragraph(paragraph_pos):
+            if self._paragraphs:
+                while paragraph_pos:
+                    content = self.__replace_str(self._paragraphs[paragraph_pos], '<(.|\n)*?>', '<>')
+                    release_time = tools.get_info(content, DAY_TIME_REGEXS, fetch_one = True)
+                    if release_time:
+                        return tools.format_date(release_time)
+
+                    paragraph_pos -= 1
+
+            return None
+
+        release_time = get_release_time_in_paragraph(self._content_start_pos)
+        if not release_time:
+            release_time = get_release_time_in_paragraph(self._content_center_pos)
 
         return release_time
 
@@ -221,25 +241,24 @@ if __name__ == '__main__':
         # 'http://pjsl.cn/Item/5845.aspx'
         # 'http://news.sina.com.cn/sf/news/flfg/2017-12-04/doc-ifypikwt7105025.shtml'
         # 'http://cq.people.com.cn/n2/2018/0327/c365403-31387318.html'
-        'http://www.zjgrrb.com/zjzgol/system/2018/03/28/030796013.shtml'
+        # 'http://www.zjgrrb.com/zjzgol/system/2018/03/28/030796013.shtml',
+        # 'http://tech.ifeng.com/a/20180116/44847498_0.shtml'
+        # 'http://tech.ifeng.com/a/20171228/44825006_0.shtml'
+        'http://news.ifeng.com/a/20180514/58297302_0.shtml'
 
     ]
-    # for url in urls:
-    #     html = tools.get_html(url)
+    for url in urls:
+        html = tools.get_html(url)
 
-    #     article_extractor = ArticleExtractor(url, html)
-    #     content = article_extractor.get_content()
-    #     title = article_extractor.get_title()
-    #     release_time = article_extractor.get_release_time()
-    #     author = article_extractor.get_author()
-    #     print('---------------------------')
-    #     print(url)
-    #     print('title : ', title)
-    #     print('release_time: ', release_time)
-    #     print('author', author)
-    #     print('content : ',content)
-    #     print('---------------------------')
-    content = '<span id="pubtime_baidu"> 2018年3月28日　11:05  </span> '
-    release_time = tools.get_info(content, DAY_TIME_REGEXS, fetch_one = True)
-    release_time = tools.format_date(release_time)
-    print(release_time)
+        article_extractor = ArticleExtractor(url, html)
+        content = article_extractor.get_content()
+        title = article_extractor.get_title()
+        release_time = article_extractor.get_release_time()
+        author = article_extractor.get_author()
+        print('---------------------------')
+        print(url)
+        print('title : ', title)
+        print('release_time: ', release_time)
+        print('author', author)
+        print('content : ',content)
+        print('---------------------------')
