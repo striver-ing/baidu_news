@@ -66,9 +66,12 @@ def set_mapping():
     es.set_mapping('news_article', mapping)
 
 def add_news_acticle(uuid, title, author, release_time, website_name, website_domain, website_position, url, content):
-    if es.get('news_article', uuid):
-        log.debug('%s 已存在'%title)
-        return False
+    data = es.get('news_article', uuid)
+    if data:
+        website = data.get('_source',{}).get('website')
+        if website == '':
+            log.debug('%s 已存在'%title)
+            return False
 
     article = {
         'uuid' : uuid,

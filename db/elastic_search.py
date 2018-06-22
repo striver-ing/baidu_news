@@ -169,7 +169,11 @@ class ES(Singleton):
 
 if __name__ == '__main__':
     es = ES()
-    print(es.get('news_article', '123131'))
+    data = es.get('news_article', '782eed78-4e02-3791-9a42-9c2e08d03514')
+    if data:
+        website = data.get('_source',{}).get('website')
+        if website == '':
+            print(website)
     # { "create": { "_index": "index1", "_type": "resource", "_id": 1 } }
     # { "title": "周星驰最新电影" }
     # { "create": { "_index": "index1", "_type": "resource", "_id": 2 } }
